@@ -1,0 +1,66 @@
+﻿@model BusRouteInfoWebsite.Models.RouteStop
+@using Microsoft.AspNetCore.Http
+
+
+@{
+
+    ViewBag.Location = ViewData["Location"];
+    ViewBag.OffsetMinutes = ViewData["OffsetMinutes"];
+    ViewData["route"] = Context.Session.GetString("busRouteCode");
+    ViewData["stop"] = Context.Session.GetString("busRouteName");
+    ViewData["Title"] = "New Stop on " + @ViewData["route"] + "-" + @ViewData["stop"];
+
+}
+
+<h2>New Stop on @ViewData["route"] - @ViewData["stop"]</h2>
+
+<hr />
+<div>
+    <ul style="color:red; font-weight:bold">
+        @if (TempData["Routemessage"] != null)
+        {
+            <li>@TempData["Routemessage"]</li>
+        }
+        @if (TempData["Stopmessage"] != null)
+        {
+            <li>@TempData["Stopmessage"]</li>
+        }
+    </ul>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="BusStopNumber" class="control-label"></label>
+                <select asp-for="BusStopNumber" class="form-control" asp-items="ViewBag.BusStopNumber"></select>
+                <span asp-validation-for="BusStopNumber" class="text-danger"></span>
+            </div>
+            <!--You need to have it here to make sure correct one gets selected-->
+            <div class="form-group" hidden>
+                <label asp-for="BusRouteCode" class="control-label"></label>
+                <select asp-for="BusRouteCode" class="form-control" asp-items="ViewBag.BusRouteCode"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="OffsetMinutes" class="control-label"></label>
+                <input asp-for="OffsetMinutes" class="form-control" />
+                <span asp-validation-for="OffsetMinutes" class="text-danger"></span>
+                @if (TempData["Stopmessage"] != null)
+                {
+                <div style="color:red;font-weight:bold">@TempData["Stopmessage"]</div>
+                }
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

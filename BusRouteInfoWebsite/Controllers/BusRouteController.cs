@@ -22,7 +22,10 @@ namespace BusRouteInfoWebsite.Controllers
         public async Task<IActionResult> Index()
         {
             TempData["message"] = "Welcome to bus route information center";
-            return View(await _context.BusRoute.ToListAsync());
+            //convert busroutecode from string to int
+            var busRouteContext = _context.BusRoute.Include(r=>r.RouteStop).OrderBy(r => Convert.ToInt32(r.BusRouteCode));
+
+            return View(await busRouteContext.ToListAsync());
         }
 
         // GET: BusRoute/Details/5
