@@ -109,7 +109,14 @@ namespace BusRouteInfoWebsite.Controllers
 
                     TempData["Routemessage"] = "This route already exists, please select new one ";
                 if (_context.RouteStop.Where(r => r.BusStopNumber == newroute.BusStopNumber && r.BusRouteCode==newroute.BusRouteCode).Any(r => r.OffsetMinutes == newroute.OffsetMinutes))
-                    TempData["Stopmessage"] = "This offset already exists, please select new one";
+                {
+                    if (newroute.OffsetMinutes == 0)
+                        TempData["Stopmessage"] = "there is already a Zero offset";
+                    else
+                        TempData["Stopmessage"] = "This offset already exists, please select new one";
+                }
+                
+                    
                 return RedirectToAction("Create", "RouteStop");
 
 
